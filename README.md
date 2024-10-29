@@ -71,12 +71,6 @@ The REST service must expose the `/accounts/` and `/payments/` endpoints, which 
 -   if the matching account exists, the response code is 200 and the response body is the matching account object
 -   if there is no account with the given id in the collection, the response code is 404
 
-`GET /articles/<id>`:
-
--   returns an article with the given id
--   if the matching article exists, the response code is 200 and the response body is the matching article object
--   if there is no article with the given id in the collection, the response code is 404
-
 `POST /payments`:
 
 -   creates a new payment

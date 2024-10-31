@@ -19,6 +19,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/accounts',[AccountController::class,'store']);
-Route::post('/payments',[PaymentController::class,'store']);
-Route::get('/accounts/{id}',[AccountController::class,'get']);
+Route::get('/account/{account}', [AccountController::class, 'get'])->name('account.get');
+Route::post('/account', [AccountController::class, 'store'])->name('account.store');
+Route::post('/payments', [PaymentController::class, 'store'])->name('payments.store');

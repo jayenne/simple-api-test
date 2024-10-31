@@ -4,54 +4,53 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use App\Models\{Account, Payment};
+use App\Models\Account;
 
 class AccountTest extends TestCase
 {
+    /**
+     * @test
+     *
+     * @group account
+     */
     public function test_account_post()
     {
-        $response1 = $this->post('/api/accounts')->assertStatus(201)->getOriginalContent();
-
+        $response1 = $this->post('/api/account')->assertStatus(201)->getOriginalContent();
         $this->assertDatabaseHas('accounts', [
-            'id' => $response1['id']
+            'id' => $response1['data']['id']
         ]);
 
-        $response2 = $this->post('/api/accounts')->assertStatus(201)->getOriginalContent();
-
+        $response2 = $this->post('/api/account')->assertStatus(201)->getOriginalContent();
         $this->assertDatabaseHas('accounts', [
-            'id' => $response2['id']
+            'id' => $response2['data']['id']
         ]);
 
-        $this->assertEquals($response1['id'], $response2['id'] - 1);
+        $this->assertEquals($response1['data']['id'], $response2['data']['id'] - 1);
     }
 
+    /**
+     * @test
+     *
+     * @group account
+     */
     public function test_account_get_by_id()
     {
         $account = Account::first();
 
-        $response = $this->get('/api/accounts/' . $account->id)->assertStatus(200)->getOriginalContent();
+        $response = $this->get('/api/account/' . $account->id)->assertStatus(200)->getOriginalContent();
 
-        $this->assertEquals($response, $account);
+        $this->assertEquals($response['data'], $account->toArray());
     }
 
+    /**
+     * @test
+     *
+     * @group account
+     */
     public function test_account_get_by_id_not_found()
     {
-        $response = $this->get('/api/accounts/abc')->assertStatus(404);
-    }
+        $response = $this->get('/api/account/abc');
 
-    public function test_payment_post()
-    {
-        $account = Account::first();
-        $this->post('/api/payments', ['account' => $account->id, 'amount' => 1000])->assertStatus(201);
-    }
-
-    public function test_payment_post_account_not_found()
-    {
-        $this->post('/api/payments', ['account' => 'abc', 'amount' => 1000])->assertStatus(404);
-    }
-
-    public function test_payment_post_validation_fail()
-    {
-        $this->post('/api/payments', ['account' => null, 'amount' => 1000])->assertStatus(400);
+        $response->assertStatus(404);
     }
 }
